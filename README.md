@@ -1,6 +1,6 @@
 # SecureAuth System
 
-A distinction-level university cybersecurity project demonstrating **token-based authentication** using industry-standard tools: JWT, bcrypt, Flask, and SQLite.
+A cybersecurity project demonstrating **token-based authentication** using industry-standard tools: JWT, bcrypt, Flask, and SQLite.
 
 ---
 
@@ -192,15 +192,4 @@ export SECRET_KEY="your-very-long-random-secret"
 | Fonts | Syne + JetBrains Mono (Google Fonts) |
 
 ---
-
-## Academic Context
-
-This project was developed as a demonstration of secure token-based authentication for a university cybersecurity assignment. It satisfies requirements for:
-
-- Secure credential storage (bcrypt + salting)
-- Stateless JWT authentication (HS256)
-- MVC architecture
-- Account lockout and brute-force protection
-- Token expiry and revocation
-- Clean, documented, student-readable code
 
