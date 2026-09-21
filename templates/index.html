@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}SecureAuth — Token-Based Authentication{% endblock %}
+
+{% block content %}
+<div class="page page--wide">
+
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="pulse"></span>JWT · bcrypt · Flask
+    </div>
+    <h1 class="hero-title">Authentication,<br><em>secure by design.</em></h1>
+    <!-- 
+    <p class="hero-sub">
+      A full-stack demonstration of JWT token-based authentication —
+      bcrypt password hashing, HMAC-SHA256 signing, and account lockout.
+    </p> -->
+    <div class="cta-row">
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Create account</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Sign in</a>
+    </div>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat">
+      <img src="{{ url_for('static', filename='images/key.png') }}" alt="Verify icon" width="24" height="24">
+      <div class="feat-title">bcrypt Hashing</div>
+      <p class="feat-desc">Salted and hashed with bcrypt. Plaintext never stored.</p>
+    </div>
+    <div class="feat">
+      <img src="{{ url_for('static', filename='images/document.png') }}" alt="Verify icon" width="24" height="24">
+      <div class="feat-title">JWT · HS256</div>
+      <p class="feat-desc">HMAC-SHA256 signed tokens with 15-minute expiry.</p>
+    </div>
+    <div class="feat">
+      <img src="{{ url_for('static', filename='images/lock.png') }}" alt="Verify icon" width="24" height="24">
+      <div class="feat-title">Account Lockout</div>
+      <p class="feat-desc">Three failed attempts locks the account automatically.</p>
+    </div>
+    <div class="feat">
+      <img src="{{ url_for('static', filename='images/verify.png') }}" alt="Verify icon" width="24" height="24">
+      <div class="feat-title">Token Verification</div>
+      <p class="feat-desc">Verify signature, expiry, and revocation status.</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-chip"><span class="flow-n">1</span> Register</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-chip"><span class="flow-n">2</span> Login</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-chip"><span class="flow-n">3</span> Token issued</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-chip"><span class="flow-n">4</span> Dashboard</div>
+    <span class="flow-arr">→</span>
+    <div class="flow-chip"><span class="flow-n">5</span> Verify Token / Logout</div>
+  </div>
+
+</div>
+{% endblock %}

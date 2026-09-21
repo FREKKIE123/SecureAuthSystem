@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}SecureAuth{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+
+  <header class="header">
+    <a class="header-brand" href="{{ url_for('auth.index') }}">
+      <span class="brand-secure">Secure</span><span class="brand-auth">Auth</span>
+    </a>
+
+    <nav class="header-nav">
+      {% if session.get('user_id') %}
+      <a href="{{ url_for('auth.dashboard') }}"
+        class="nav-link {% if request.endpoint == 'auth.dashboard' %}active{% endif %}">
+        Dashboard
+      </a>
+      <a href="{{ url_for('auth.verify') }}"
+        class="nav-link {% if request.endpoint == 'auth.verify' %}active{% endif %}">
+        Verify Token
+      </a>
+      {% else %}
+      <a href="{{ url_for('auth.login') }}" class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}">
+        Sign in
+      </a>
+      <a href="{{ url_for('auth.register') }}"
+        class="nav-link nav-primary {% if request.endpoint == 'auth.register' %}active{% endif %}">
+        Register
+      </a>
+      {% endif %}
+    </nav>
+
+    <div class="header-right">
+      {% if session.get('user_id') %}
+      <div class="user-chip">
+        <span class="user-chip-dot"></span>
+        {{ session.get('username') }}
+      </div>
+      <a href="{{ url_for('auth.logout') }}" class="nav-link nav-danger">Sign out</a>
+      {% endif %}
+      <button class="theme-btn" id="themeBtn" title="Toggle theme">
+        <span id="themeIcon">☾</span>
+      </button>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flashes">
+    {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">
+      <span class="flash-dot"></span>{{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  <footer>Developed by Mphoyaone Frekkie</footer>
+
+  <script>
+    const html = document.documentElement;
+    const btn = document.getElementById('themeBtn');
+    const icon = document.getElementById('themeIcon');
+    const saved = localStorage.getItem('sa-theme') || 'light';
+    html.setAttribute('data-theme', saved);
+    icon.textContent = saved === 'dark' ? '☀' : '☾';
+    btn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('sa-theme', next);
+      icon.textContent = next === 'dark' ? '☀' : '☾';
+    });
+  </script>
+
+</body>
+
+</html>

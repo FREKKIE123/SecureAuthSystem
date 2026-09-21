@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Sign In — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-header">
+      <div class="auth-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 18H4A2 2 0 0 1 2 16V4A2 2 0 0 1 4 2H7M13.5 14l4-4-4-4M17.5 10H7.5" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <h1 class="auth-title">Sign in</h1>
+      <p class="auth-subtitle">Authenticate to receive your signed JWT token.</p>
+    </div>
+
+    <form class="form-stack" method="POST" action="{{ url_for('auth.login') }}">
+
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-input" type="text" id="username" name="username" placeholder="Your username" required
+          autocomplete="username" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required
+          autocomplete="current-password" />
+      </div>
+
+      <div class="notice notice-warning">
+        <span class="notice-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1.5L12.5 11H1.5L7 1.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+            <line x1="7" y1="5.5" x2="7" y2="8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+            <circle cx="7" cy="9.5" r=".6" fill="currentColor" />
+          </svg>
+        </span>
+        <span>After <strong>3 failed attempts</strong>, your account will be locked. Contact an administrator to restore
+          access.</span>
+      </div>
+
+      <button class="btn btn-primary btn-full" type="submit">
+        Sign in and get token
+      </button>
+
+    </form>
+
+    <div class="auth-footer">
+      No account yet? <a href="{{ url_for('auth.register') }}">Register here</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

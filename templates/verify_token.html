@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Verify Token — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="page">
+
+  <div style="margin-bottom:1.5rem;">
+    <h1 style="font-size:1.15rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.2rem;">Token Verification</h1>
+    <p style="font-size:.84rem;color:var(--text-3);">Paste any JWT to check its signature, expiry, and integrity.</p>
+  </div>
+
+  <div class="auth-card">
+    <form class="form-stack" method="POST" action="{{ url_for('auth.verify') }}">
+      <div class="form-group">
+        <label class="form-label" for="token">JWT Token</label>
+        <textarea class="form-input form-textarea" id="token" name="token" placeholder="Paste your JWT here…" required
+          spellcheck="false">{{ token_input }}</textarea>
+        <span class="form-hint">Your current session token is pre-filled above.</span>
+      </div>
+      <button class="btn btn-primary btn-full" type="submit">
+        <img src="{{ url_for('static', filename='images/verify.png') }}" alt="Verify icon" width="24" height="24">
+        Verify token</button>
+    </form>
+
+    {% if result is not none %}
+    <div class="result-box {% if result.valid %}result-valid{% else %}result-invalid{% endif %}">
+      <div class="result-top">
+        <div class="result-icon {% if result.valid %}ri-ok{% else %}ri-err{% endif %}">
+          {% if result.valid %}✓{% else %}✕{% endif %}
+        </div>
+        <div class="result-title">
+          {% if result.valid %}Token is valid{% else %}Verification failed{% endif %}
+        </div>
+      </div>
+      {% if result.valid %}
+      <p class="result-msg">Signature verified. Token has not been tampered with.</p>
+      <div class="claims">
+        <div class="claims-head">Decoded claims</div>
+        {% for key, value in result.payload.items() %}
+        <div class="claim-row">
+          <span class="ck">{{ key }}</span>
+          <span class="cv">
+            {% if key in ['iat','exp'] %}{{ value|int|timestamp_to_str }}
+            {% else %}{{ value }}{% endif %}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="result-msg">{{ result.error }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <details class="explainer">
+      <summary>What does verification check?</summary>
+      <div class="exp-body">
+        <p><strong>Signature</strong> — Was the token signed with our secret key? Any modification breaks HMAC-SHA256
+          immediately.</p>
+        <p><strong>Expiry (exp)</strong> — Is the current time within the 15-minute validity window?</p>
+        <p><strong>Issuer (iss)</strong> — Does the issuer claim match this system?</p>
+        <p><strong>Revocation (jti)</strong> — Has this token been explicitly revoked via logout?</p>
+      </div>
+    </details>
+
+  </div>
+</div>
+{% endblock %}

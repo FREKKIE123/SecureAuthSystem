@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="page page--wide">
+
+  <div class="info-strip">
+    <div class="info-cell">
+      <div class="info-label">Signed in as</div>
+      <div class="info-value">{{ username }}</div>
+      <div class="info-sub"><span class="badge badge-blue">{{ role }}</span></div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Session</div>
+      <div class="info-value" style="font-size:.85rem;padding-top:.1rem;">
+        <span class="badge badge-green"><span class="live-dot"></span> Active</span>
+      </div>
+      <div class="info-sub">Authenticated via JWT</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Algorithm</div>
+      <div class="info-value">HS256</div>
+      <div class="info-sub">HMAC-SHA256</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Token lifetime</div>
+      <div class="info-value">15 min</div>
+      <div class="info-sub">From time of login</div>
+    </div>
+  </div>
+
+  <div class="token-card">
+    <div class="token-card-head">
+      <div class="token-card-title">Your JWT Token</div>
+      <span class="expiry-tag">Expires in ~15 min</span>
+    </div>
+
+    <div class="token-raw" id="tokenRaw">{{ token }}</div>
+
+    <div class="token-bar">
+      <button class="btn btn-ghost btn-sm" onclick="copyToken()">📋 Copy token</button>
+      <span id="copyOk" class="copy-ok" style="display:none;">✓ Copied</span>
+    </div>
+
+    <div class="jwt-breakdown">
+      <div class="section-title">Token structure — Header · Payload · Signature</div>
+      {% set parts = token.split('.') %}
+      {% if parts|length == 3 %}
+      <div class="jwt-display">
+        <span class="jh" title="Header">{{ parts[0] }}</span><span class="jd">.</span><span class="jp"
+          title="Payload — claims">{{ parts[1] }}</span><span class="jd">.</span><span class="js"
+          title="Signature — HMAC-SHA256">{{ parts[2] }}</span>
+      </div>
+      {% endif %}
+      <div class="jwt-legend">
+        <div class="legend-item">
+          <span class="ldot" style="background:var(--jwt-h)"></span> Header
+        </div>
+        <div class="legend-item">
+          <span class="ldot" style="background:var(--jwt-p)"></span> Payload (Base64, not encrypted)
+        </div>
+        <div class="legend-item">
+          <span class="ldot" style="background:var(--jwt-s)"></span> Signature — detects tampering
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-links">
+    <a href="{{ url_for('auth.verify') }}" class="quick-card">
+      <img src="{{ url_for('static', filename='images/verify.png') }}" alt="Verify icon" width="24" height="24">
+      <div class="quick-title">Verify Token</div>
+      <p class="quick-desc">Check your token's signature, expiry, and integrity.</p>
+    </a>
+    <a href="{{ url_for('auth.logout') }}" class="quick-card">
+      <img src="{{ url_for('static', filename='images/sign_out.png') }}" alt="Verify icon" width="24" height="24">
+      <div class="quick-title">Sign Out</div>
+      <p class="quick-desc">Revoke your token and end the session.</p>
+    </a>
+  </div>
+
+</div>
+
+<script>
+  function copyToken() {
+    navigator.clipboard.writeText(document.getElementById('tokenRaw').textContent.trim())
+      .then(() => {
+        const el = document.getElementById('copyOk');
+        el.style.display = 'inline';
+        setTimeout(() => el.style.display = 'none', 2000);
+      });
+  }
+</script>
+{% endblock %}

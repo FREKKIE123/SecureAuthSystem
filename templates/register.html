@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Register — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <div class="auth-icon">✎</div>
+      <h1 class="auth-title">Create account</h1>
+      <p class="auth-subtitle">Your password is hashed with bcrypt — never stored in plaintext.</p>
+
+      <form class="form-stack" method="POST" action="{{ url_for('auth.register') }}">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" type="text" id="username" name="username" placeholder="e.g. alice" minlength="3"
+            maxlength="80" required autocomplete="username" />
+          <span class="form-hint">Minimum 3 characters.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" minlength="8"
+            required autocomplete="new-password" />
+          <span class="form-hint">Minimum 8 characters.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirm_password">Confirm password</label>
+          <input class="form-input" type="password" id="confirm_password" name="confirm_password" placeholder="••••••••"
+            minlength="8" required autocomplete="new-password" />
+        </div>
+        <div class="notice notice-info">
+          <span>bcrypt applies a random salt and hashes your password before storage.
+            The plaintext is never written to the database.</span>
+        </div>
+        <button class="btn btn-primary btn-full" type="submit">Create account</button>
+      </form>
+
+      <div class="auth-switch">
+        Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
